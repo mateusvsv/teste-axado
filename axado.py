@@ -3,11 +3,6 @@
 import csv
 import sys
 
-ORIGEM = sys.argv[1]
-DESTINO = sys.argv[2]
-NOTA_FISCAL = sys.argv[3]
-PESO = sys.argv[4]
-
 def main():
     if validar_entrada():
         axado = Axado()
@@ -15,17 +10,18 @@ def main():
         axado.tabela2.exibir_resultado()
 
 def validar_entrada():
-    if not ORIGEM:
-        print 'Por favor, digite a cidade de origem.'
+    if len(sys.argv) != 5:
+        print '\n Atenção! O formato de entrada deve ser: <origem> <destino> <nota_fiscal> <peso>\n'
         return False
-    if not DESTINO:
-        print 'Por favor, digite a cidade de destino.'
+    try:
+        nota = float(sys.argv[3])
+    except:
+        print '\n Atenção! O valor referente à nota fiscal deve ser um valor numérico.\n'
         return False
-    if not NOTA_FISCAL:
-        print 'Por favor, digite o valor da nota fiscal.'
-        return False
-    if not PESO:
-        print 'Por favor, digite o valor do peso do produto.'
+    try:
+        peso = float(sys.argv[4])
+    except:
+        print '\n Atenção! O valor referente ao peso deve ser um valor numérico.\n'
         return False
     return True
 
@@ -37,10 +33,16 @@ class Axado(object):
 
 class TabelaBase(object):
     
+    ORIGEM = sys.argv[1]
+    DESTINO = sys.argv[2]
+    NOTA_FISCAL = 0
+    PESO = 0
     PRECO_POR_KG_CSV = 'preco_por_kg.csv'
     ROTAS_CSV = 'rotas.csv'
 
     def __init__(self, diretorio):
+        self.NOTA_FISCAL = self.formata_valor(sys.argv[3])
+        self.PESO = self.formata_valor(sys.argv[4])
         self.diretorio = diretorio
         self.rota = self.busca_rota()
         self.preco_kg_rota = self.busca_preco_kg()
@@ -57,25 +59,25 @@ class TabelaBase(object):
         inicial = self.formata_valor(pkg['inicial'])
         final = self.formata_valor(pkg['final'])
         return (pkg['nome'] == self.rota['kg'] and
-               inicial <= float(PESO) and
-               (final > float(PESO) or pkg['final'] == ''))
+               inicial <= self.PESO and
+               (final > self.PESO or pkg['final'] == ''))
 
     def busca_rota(self):
         url = self.DIRETORIO + self.ROTAS_CSV
         with open(url) as arquivo:
             rotas = csv.DictReader(arquivo)
             for rota in rotas:
-                if rota['origem'] == ORIGEM and rota['destino'] == DESTINO:
+                if rota['origem'] == self.ORIGEM and rota['destino'] == self.DESTINO:
                     return rota
 
     def calcula_seguro(self):
         seguro_rota = self.formata_valor(self.rota['seguro'])
-        seguro = self.formata_valor(NOTA_FISCAL) * seguro_rota / 100
+        seguro = self.NOTA_FISCAL * seguro_rota / 100
         return seguro
 
     def calcula_kg(self):
         pkg_rota = self.formata_valor(self.preco_kg_rota)
-        kg = pkg_rota * float(PESO)
+        kg = pkg_rota * self.PESO
         return kg
 
     def formata_valor(self, valor):
@@ -121,7 +123,7 @@ class Tabela2(TabelaBase):
 
     def limite_aceitavel(self):
         limite = self.formata_valor(self.rota['limite'])
-        if limite and float(PESO) > limite:
+        if limite and self.PESO > limite:
             return False
         return True
 
