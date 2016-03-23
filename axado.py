@@ -106,9 +106,10 @@ class Tabela(TabelaBase):
 
     def exibir_resultado(self):
         frete = self.calcular_frete()
+        frete = '%.2f' % frete
         prazo = self.rota['prazo']
         pasta = self.DIRETORIO.replace('/','')
-        print pasta + ':' + prazo + ', ' + '%.2f' % frete
+        print pasta + ':' + prazo + ', ' + frete
 
 
 class Tabela2(TabelaBase):
@@ -119,7 +120,8 @@ class Tabela2(TabelaBase):
         super(Tabela2, self).__init__(self.DIRETORIO) 
 
     def limite_aceitavel(self):
-        if PESO > self.rota['limite']:
+        limite = self.formata_valor(self.rota['limite'])
+        if limite and float(PESO) > limite:
             return False
         return True
 
@@ -141,10 +143,15 @@ class Tabela2(TabelaBase):
         return total
 
     def exibir_resultado(self):
-        frete = self.calcular_frete()
-        prazo = self.rota['prazo']
+        if self.limite_aceitavel():
+            frete = self.calcular_frete()
+            frete = '%.2f' % frete
+            prazo = self.rota['prazo']
+        else:
+            frete = '-'
+            prazo = '-'
         pasta = self.DIRETORIO.replace('/','')
-        print pasta + ':' + prazo + ', ' + '%.2f' % frete
+        print pasta + ':' + prazo + ', ' + frete
 
 
 if __name__ == "__main__":
