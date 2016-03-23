@@ -1,7 +1,7 @@
 ## Teste Técnico - Axado
 
-Aplicação que calcula prazo e preço de frete desenvolvida como teste técnico para
-a vaga de Desenvolvedor Python 2.7.6.
+Aplicação em Python 2.7.6 que calcula prazo e preço de frete desenvolvida como teste técnico para
+a vaga de Desenvolvedor Python da empresa Axado.
 
 ## Exemplo de utilização:
 
@@ -25,4 +25,4 @@ Exemplo de resultado:
 ## Implementações Futuras
 
 - Testes unitários
-- Validação de rotas
+- Validação de rotas na entrada
