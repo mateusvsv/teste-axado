@@ -9,28 +9,32 @@ def main():
         axado.tabela.exibir_resultado()
         axado.tabela2.exibir_resultado()
 
+# Valida se todos os parâmetros foram passados e se os campos de nota fiscal e peso
+# são valores numéricos
 def validar_entrada():
     if len(sys.argv) != 5:
-        print '\n Atenção! O formato de entrada deve ser: <origem> <destino> <nota_fiscal> <peso>\n'
+        print u'\n Atenção! O formato de entrada deve ser: <origem> <destino> <nota_fiscal> <peso>\n'
         return False
     try:
         nota = float(sys.argv[3])
     except:
-        print '\n Atenção! O valor referente à nota fiscal deve ser um valor numérico.\n'
+        print u'\n Atenção! O valor referente à nota fiscal deve ser um valor numérico.\n'
         return False
     try:
         peso = float(sys.argv[4])
     except:
-        print '\n Atenção! O valor referente ao peso deve ser um valor numérico.\n'
+        print u'\n Atenção! O valor referente ao peso deve ser um valor numérico.\n'
         return False
     return True
 
+# Classe para agrupar os objetos das tabelas
 class Axado(object):
 
     def __init__(self):
         self.tabela = Tabela()
         self.tabela2 = Tabela2()
 
+# Classe base com informações comuns às duas tabelas
 class TabelaBase(object):
     
     ORIGEM = sys.argv[1]
@@ -86,7 +90,7 @@ class TabelaBase(object):
         except:
             return 0
 
-
+# Classe responsável por operar informações da tabela
 class Tabela(TabelaBase):
 
     DIRETORIO = 'tabela/'
@@ -114,6 +118,7 @@ class Tabela(TabelaBase):
         print pasta + ':' + prazo + ', ' + frete
 
 
+# Classe responsável por operar informações da tabela2
 class Tabela2(TabelaBase):
 
     DIRETORIO = 'tabela2/'
