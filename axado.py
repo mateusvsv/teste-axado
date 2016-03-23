@@ -60,7 +60,7 @@ class TabelaBase(object):
         final = self.formata_valor(pkg['final'])
         return (pkg['nome'] == self.rota['kg'] and
                inicial <= self.PESO and
-               (final > self.PESO or pkg['final'] == ''))
+               (final > self.PESO or final == 0))
 
     def busca_rota(self):
         url = self.DIRETORIO + self.ROTAS_CSV
